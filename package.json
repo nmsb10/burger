@@ -4,6 +4,7 @@
   "description": "for homework 12",
   "main": "server.js",
   "scripts": {
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -22,5 +23,8 @@
     "express-handlebars": "^3.0.0",
     "method-override": "^2.3.7",
     "mysql": "^2.13.0"
+  },
+  "engines": {
+    "node": "7.2.1"
   }
 }
