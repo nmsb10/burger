@@ -21,6 +21,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 //eg within an html file, refer to the static css file
 // app.use(express.static(path.join(__dirname, '/public/assets')));
 //app.use(express.static(__dirname +'/public/assets'));
+//process.cwd() represents the directory in which server.js is located
 app.use(express.static(process.cwd() +'/public/assets'));
 
 // Override with POST having ?_method=DELETE
@@ -32,9 +33,12 @@ var exphbs = require('express-handlebars');
 //create express handlebars engine:
 //give internal name of hbs
 //make default layout main.handlebars
-app.engine('hbs', exphbs({ defaultLayout: "main" , layoutsDir: __dirname + '/views/layouts'}));
+// app.engine('hbs', exphbs({ defaultLayout: "main" , layoutsDir: __dirname + '/views/layouts'}));
+//NOTE: name of the engine MUST match the file extension (in this case, we named the handlebars files YYY.handlebars)
+app.engine('handlebars', exphbs({ defaultLayout: "main" }));
 //now set the engine you use to the 'hbs' engine you just created above
-app.set("view engine", 'hbs');
+//app.set("view engine", 'hbs');
+app.set("view engine", 'handlebars');
 //now the handlebars engine will use the main.handlebars as the default html page,
 //and use the index.handlebars content to replace {{{ body }}}
 
@@ -47,10 +51,6 @@ app.set("view engine", 'hbs');
 //require('./app/routing/htmlRoutes.js')(app);
 var routes = require('./controllers/burgers_controller.js');
 
-//for the routing, could also do:
-// var something = require('./app/routing/some.js');
-// //this means, if url is /special, use the routing as described in some.js
-// app.use('/special', something);
 //here, if URL is /, use routes as specified in burgers_controller.js
 app.use('/', routes);
 

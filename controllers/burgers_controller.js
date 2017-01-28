@@ -6,37 +6,31 @@ var router = express.Router();
 var hamburger = require("../models/burger.js");
 
 // Create all the routes and set up logic within those routes where required.
-router.get("/", function(req, res) {
-  hamburger.all(function(data) {
-    var hbsObject = {
-      cats: data
-    };
-    console.log(hbsObject);
-    res.render("index", hbsObject);
-  });
+router.get('/', function(request, response){
+	hamburger.all(function(data){
+		var handlebarsObject = {
+			burger: data
+		};
+		response.render('index', handlebarsObject);
+	});
 });
 
-// router.post("/", function(req, res) {
-//   cat.create([
-//     "name", "sleepy"
-//   ], [
-//     req.body.name, req.body.sleepy
-//   ], function() {
-//     res.redirect("/");
-//   });
-// });
+router.post('/', function(request, response){
+	//enter the appropriate hamburgers table column names
+	//enter the hamburger name provided from the input field, and set devoured to false
+	hamburger.create(['hamburger_name', 'devoured'],[request.body.burger_input, false], function(){
+		response.redirect('/');
+	});
+});
 
-// router.put("/:id", function(req, res) {
-//   var condition = "id = " + req.params.id;
+router.put('/:id', function(request, response){
+	var condition = 'id = ' + request.params.id;
 
-//   console.log("condition", condition);
+	hamburger.update({devoured: request.body.devoured}, condition, function(){
+		response.redirect('/');
+	});
+});
 
-//   cat.update({
-//     sleepy: req.body.sleepy
-//   }, condition, function() {
-//     res.redirect("/");
-//   });
-// });
 
 // Export routes for server.js to use.
 module.exports = router;

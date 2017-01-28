@@ -1,31 +1,16 @@
 // Import MySQL connection.
-var connection = require("./connection.js");
+var connection = require("../config/connection.js");
 
-
-// In the orm.js file, create the methods that will execute the necessary MySQL commands
-//in the controllers. These are the methods you will need to use in order to retrieve
-//and store data in your database.
-// selectAll()
-// insertOne()
-// updateOne()
-
-
-
-
-
-
-// Helper function for SQL syntax.
-function printQuestionMarks(num) {
-  var arr = [];
-
-  for (var i = 0; i < num; i++) {
-    arr.push("?");
+// returns an array of ?, equal to the number of elements in the input array
+function questionMarks(array) {
+  var questionMarksArray = [];
+  for (var i = 0; i < array.length; i++) {
+    questionMarksArray.push('?');
   }
-
-  return arr.toString();
+  return questionMarksArray.toString();
 }
 
-// Helper function for SQL syntax.
+// Helper function for SQL syntax. (provided from 9mvc cats exercise)
 function objToSql(ob) {
   var arr = [];
 
@@ -38,52 +23,42 @@ function objToSql(ob) {
   return arr.toString();
 }
 
-// Object for all our SQL statement functions.
 var orm = {
-  all: function(tableInput, cb) {
-    var queryString = "SELECT * FROM " + tableInput + ";";
-    connection.query(queryString, function(err, result) {
-      if (err) {
-        throw err;
-      }
-      cb(result);
+  //selectAll function returns all data from the tableName
+  selectAll: function(tableName, callback){
+    var query = 'SELECT * FROM ' + tableName + ';';
+    connection.query(query, function(error, response){
+      if(error) throw error;
+      console.log(response);
+      callback(response);
     });
   },
-  create: function(table, cols, vals, cb) {
-    var queryString = "INSERT INTO " + table;
-
-    queryString += " (";
-    queryString += cols.toString();
-    queryString += ") ";
-    queryString += "VALUES (";
-    queryString += printQuestionMarks(vals.length);
-    queryString += ") ";
-
-    console.log(queryString);
-
-    connection.query(queryString, vals, function(err, result) {
-      if (err) {
-        throw err;
+  //insertOne inserts a new row of data
+  insertOne: function(tableName, columnNamesArray, valuesArray, callback){
+    var mySQLQuery = 'INSERT INTO ' + tableName + ' (' + columnNamesArray.toString() + ') ' + 'VALUES ('+ questionMarks(valuesArray) + ');';
+    connection.query(mySQLQuery, valuesArray, function(error, response) {
+      if (error) {
+        throw error;
       }
-
-      cb(result);
+      callback(response);
     });
   },
-  // An example of objColVals would be {name: panther, sleepy: true}
-  update: function(table, objColVals, condition, cb) {
-    var queryString = "UPDATE " + table;
-
-    queryString += " SET ";
-    queryString += objToSql(objColVals);
-    queryString += " WHERE ";
-    queryString += condition;
-
-    console.log(queryString);
-    connection.query(queryString, function(err, result) {
-      if (err) {
-        throw err;
-      }
-      cb(result);
+  //showSelected returns all data with particular criteria met
+  showSelection: function(tableName, columnName, condition, callback){
+    //connection.query('SELECT * FROM burgers WHERE devoured = false', function(err, response){
+    var mySQLQuery = 'SELECT * FROM ' + tableName + ' WHERE ' + columnname + ' = ' + condition;
+    connection.query(mySQLQuery, function(error, response){
+      if(error) throw error;
+      callback(response);
+    });
+  },
+  //updateOne will change something for a particular row of table data
+  //objectToChange example: {burger_name: 'healthy burger', devoured: false}
+  updateOne: function(tableName, objectToChange, condition, callback){
+    var mySQLQuery = 'UPDATE ' + tableName + ' SET '+ objToSql(objectToChange) + ' WHERE ' + condition;
+    connection.query(mySQLQuery, function(error, response){
+      if(error) throw error;
+      callback(response);
     });
   }
 };

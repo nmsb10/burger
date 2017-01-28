@@ -1,3 +1,42 @@
-<h1>burgers</h1>
-<hr>
-<h2>healthy choices available</h2>
+<div id = 'burgers-new' class = 'portion'>
+	{{#each burger}}
+		{{#unless this.devoured}}
+			<div class = 'burger-listing'>
+				<div class = 'burger-name'>
+					{{this.burger_name}}
+				</div>
+				<form action="/{{this.id}}?_method=PUT" method="POST" class='devour-form'>
+					<input type="hidden" name="devoured" value="true">
+					<button type="submit">devour</button>
+				</form>
+			</div>
+		{{/unless}}
+	{{/each}}
+</div>
+<div id = 'burger-center' class = 'portion'>
+	<img src="./assets/img/giantburger.jpg" alt="giant burger" id='burger-image'>
+	<h2>create your own burger</h2>
+	<form id = 'create-burger-form' action = '/' method = 'POST'>
+		<div class = 'form-section'>
+			<label>burger description:</label>
+			<br>
+			<input type = 'text' name = 'burger_input' placeholder = 'describe your dream burger' id = 'burger-input'>
+		</div>
+		<button type = 'submit' title = 'click to submit your burger'>submit your burger!</button>
+	</form>
+</div>
+<div id = 'burgers-devoured' class = 'portion'>
+	{{#each burger}}
+		{{#if this.devoured}}
+			<div class = 'burger-listing-devoured'>
+				<div class = 'burger-name'>
+					{{this.burger_name}}
+				</div>
+				<form action="/{{this.id}}?_method=PUT" method="POST" class='devour-form'>
+					<input type="hidden" name="devoured" value="false">
+					<button type="submit">un-devour :)</button>
+				</form>
+			</div>
+		{{/if}}
+	{{/each}}
+</div>

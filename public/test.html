@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+		<link rel="stylesheet" href="./assets/css/burger_style.css" type="text/css" />
+		<title>burgers | homework 12</title>
+</head>
+<body>
+	<div id = 'burgers-new' class = 'portion'>
+		<div class = 'burger-listing'>
+			<div class = 'burger-name'>
+			big burger one
+			</div>
+			<form action="/{{this.id}}?_method=PUT" method="POST" class='devour-form'>
+				<input type="hidden" name="devoured" value="true">
+				<button type="submit">devour</button>
+			</form>
+		</div>
+	</div>
+	<div id = 'burger-center' class = 'portion'>
+		<img src="./assets/img/giantburger.jpg" alt="giant burger" id='burger-image'>
+		<h2>create your own burger</h2>
+		<form id = 'create-burger-form' action = '/' method = 'POST'>
+			<div class = 'form-section'>
+				<label>burger description:</label>
+				<br>
+				<input type = 'text' name = 'burger-input' placeholder = 'describe your dream burger' id = 'burger-input'>
+			</div>
+			<button type = 'submit' title = 'click to submit your burger'>submit your burger!</button>
+		</form>
+	</div>
+	<div id = 'burgers-devoured' class = 'portion'>
+	</div>
+</body>
+</html>
