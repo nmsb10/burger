@@ -8,8 +8,11 @@ var hamburger = require("../models/burger.js");
 // Create all the routes and set up logic within those routes where required.
 router.get('/', function(request, response){
 	hamburger.all(function(data){
+		var burgerSources = [{source:'/img/giantburger.jpg', name:'giant burger'}, {source:'/img/healthierburger.jpg', name: 'healthier burger'}, {source:'/img/lettucebunburger.jpg', name: 'lettuce bun burger'}];
+		//var burgerImageSelection = burgerSources[Math.floor(Math.random()*burgerSources.length)];
 		var handlebarsObject = {
-			burger: data
+			burger: data,
+			burgerImage: burgerSources[Math.floor(Math.random()*burgerSources.length)]
 		};
 		response.render('index', handlebarsObject);
 	});
@@ -18,7 +21,8 @@ router.get('/', function(request, response){
 router.post('/', function(request, response){
 	//enter the appropriate hamburgers table column names
 	//enter the hamburger name provided from the input field, and set devoured to false
-	hamburger.create(['hamburger_name', 'devoured'],[request.body.burger_input, false], function(){
+	//in index.handlebars, the hidden input for 'devoured' is value 0 for false...
+	hamburger.create(['burger_name', 'devoured'],[request.body.burger_input, request.body.devoured], function(){
 		response.redirect('/');
 	});
 });

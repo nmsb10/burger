@@ -29,7 +29,6 @@ var orm = {
     var query = 'SELECT * FROM ' + tableName + ';';
     connection.query(query, function(error, response){
       if(error) throw error;
-      console.log(response);
       callback(response);
     });
   },
